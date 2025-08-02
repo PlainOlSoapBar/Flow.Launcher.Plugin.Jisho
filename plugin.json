@@ -5,7 +5,7 @@
   "Name": "Jisho",
   "Description": "Lookup any words within Jisho (a Japanese-English Dictionary).",
   "Version": "1.0.0",
-  "Author": "Brandon Tseng",
+  "Author": "PlainOlSoapBar",
   "Language": "typescript",
   "Website": "https://github.com/PlainOlSoapBar/Flow.Launcher.Plugin.Jisho",
   "ExecuteFileName": "dist\\main.js",

@@ -8,36 +8,61 @@ type Methods = 'open_result';
 
 const { params, showResult, on, run } = new Flow<Methods>('assets/favicon.png');
 
-on('query', async () => {
-    if (params.length < 1) {
-        return showResult({
-           title: 'English, Japanese, Romaji, words or text' 
-        });
+function fetchTerm(word: string, reading: string) {
+  // Word and reading can be undefined if the word has no Kanji and the reading is the same as the word
+  if (word && reading) {
+    return `${word} | ${reading}`;
+  } else if (word) {
+    return `${word}`;
+  }
+  return `${reading}`;
+}
+
+function fetchDefinition(definitions: any) {
+    // Multiple definitions is stored as a string array, but single definitions are stored as a string
+    if (Array.isArray(definitions)) {
+        return definitions.join(', ');
     }
+    return definitions;
+}
 
-    try {
-        const { data }: GetPackagesResponse = await api.get('/words', {
-          params: {
-            keyword: params,
-          },
-        });
+on('query', async () => {
+  if (params.length < 1) {
+    return showResult({
+      title: 'English, Japanese, Romaji, words or text',
+    });
+  }
 
-        const results: JSONRPCResponse<Methods>[] = [];
-
-    data.data.forEach(({ japanese: [result] }) => {
-      results.push({
-        title: result.word,
-        subtitle: result.reading,
-        method: 'open_result',
-        iconPath: 'assets/favicon.png',
-      });
+  try {
+    const { data }: GetPackagesResponse = await api.get('/words', {
+      params: {
+        keyword: params,
+      },
     });
 
-    showResult(...results);
+    const results: JSONRPCResponse<Methods>[] = [];
+
+    data.data.forEach(({ japanese: [japaneseResult], senses: [senseResult] }) => {
+    results.push({
+      title: fetchTerm(japaneseResult.word, japaneseResult.reading),
+      subtitle: fetchDefinition(senseResult.english_definitions),
+      method: 'open_result',
+      params: [`https://jisho.org/search/${japaneseResult.word || japaneseResult.reading}`],
+      iconPath: 'assets/favicon.png',
+    });
+    });
+
+    if (results.length == 0) {
+      showResult({
+        title: 'No results found.',
+      });
+    } else {
+      showResult(...results);
+    }
   } catch (err) {
     if (axios.isAxiosError(err) || err instanceof Error) {
       return showResult({
-        title: 'Error',
+        title: 'Error!',
         subtitle: err.message,
       });
     }
@@ -45,7 +70,7 @@ on('query', async () => {
 });
 
 on('open_result', () => {
-  const url = `https://jisho.org/search/${params}`;
+  const url = params;
   open(url);
 });
 

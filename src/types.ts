@@ -10,7 +10,7 @@ export interface GetPackagesResponse {
         ];
         senses: [
           {
-            english_defintions: string;
+            english_definitions: string;
           }
         ];
       }
