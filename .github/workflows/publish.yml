@@ -25,12 +25,11 @@ jobs:
           prop_path: 'Version'
       - run: echo ${{steps.version.outputs.prop}}
       - name: Install dependencies
-        run: |
-          npm install
-          zip -r Flow.Launcher.Plugin.Jisho.zip . -x '*.git*' -x 'README.md'
+        run: npm install
       - name: Build
-        run: |
-          npm run build
+        run: npm run build
+      - name: Package
+        run: zip -r Flow.Launcher.Plugin.Jisho.zip . -x '*.git*' -x 'src/*' -x 'README.md' -x 'tsconfig.json'
       - name: Publish
         uses: softprops/action-gh-release@v1
         with:
