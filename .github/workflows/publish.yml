@@ -28,6 +28,9 @@ jobs:
         run: |
           npm install
           zip -r Flow.Launcher.Plugin.Jisho.zip . -x '*.git*' -x 'README.md'
+      - name: Build
+        run: |
+          npm run build
       - name: Publish
         uses: softprops/action-gh-release@v1
         with:
