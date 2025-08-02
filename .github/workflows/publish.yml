@@ -1,0 +1,37 @@
+name: publish
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths-ignore: 
+      - .github/workflows/*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.Js
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '20.2.0'
+      - name: get version
+        id: version
+        uses: notiz-dev/github-action-json-property@release
+        with: 
+          path: 'plugin.json'
+          prop_path: 'Version'
+      - run: echo ${{steps.version.outputs.prop}}
+      - name: Install dependencies
+        run: |
+          npm install
+          zip -r Flow.Launcher.Plugin.Jisho.zip . -x '*.git*' -x 'README.md'
+      - name: Publish
+        uses: softprops/action-gh-release@v1
+        with:
+          files: 'Flow.Launcher.Plugin.Jisho.zip'
+          tag_name: "v${{steps.version.outputs.prop}}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
