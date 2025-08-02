@@ -1,12 +1,13 @@
 {
   "$schema": "https://www.flowlauncher.com/schemas/plugin.schema.json",
   "ID": "c698ffd8-030c-4f48-b5ab-df69cdfae23e",
-  "ActionKeywords": ["j"],
+  "ActionKeywords": ["ji"],
   "Name": "Jisho",
   "Description": "Lookup any words within Jisho (a Japanese-English Dictionary).",
+  "Version": "1.0.0",
   "Author": "Brandon Tseng",
   "Language": "typescript",
   "Website": "https://github.com/PlainOlSoapBar/Flow.Launcher.Plugin.Jisho",
-  "ExecuteFileName": "src\\main.ts",
+  "ExecuteFileName": "dist\\main.js",
   "IcoPath": "assets\\favicon.png"
 }
