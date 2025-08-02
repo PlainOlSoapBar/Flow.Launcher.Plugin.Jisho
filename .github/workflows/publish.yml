@@ -34,4 +34,4 @@ jobs:
           files: 'Flow.Launcher.Plugin.Jisho.zip'
           tag_name: "v${{steps.version.outputs.prop}}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PLUGIN_TOKEN }}
